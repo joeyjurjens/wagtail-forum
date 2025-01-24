@@ -1,0 +1,19 @@
+Metadata-Version: 2.2
+Name: wagtail-forum
+Version: 0.1.0
+Summary: A wagtail package that allows for forum functionality.
+Author-email: Joey Jurjens <joeyjurjens@gmail.com>
+License: MIT
+Classifier: Development Status :: 3 - Alpha
+Classifier: Framework :: Django
+Classifier: Framework :: Wagtail
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+Requires-Dist: wagtail>=5.2
+Requires-Dist: django>=4.2

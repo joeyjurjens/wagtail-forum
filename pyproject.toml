@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wagtail-forum"
+version = "0.1.0"
+authors = [{ name = "Joey Jurjens", email = "joeyjurjens@gmail.com" }]
+description = "A wagtail package that allows for forum functionality."
+readme = "README.md"
+requires-python = ">3.9"
+license = { text = "MIT" }
+classifiers = [
+    "Framework :: Django",
+    "Framework :: Wagtail",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = ["wagtail", "django"]
+
+[tool.setuptools]
+packages = ["wagtail_forum"]
+
+[tool.setuptools.package-data]
+wagtail_forum = ["templates/**/*.html", "static/**/*"]
+
+[tool.poetry.group.dev.dependencies]
+faker = "^35.0.0"
+ruff = "^0.9.3"
+isort = "^5.13.2"
+
+[tool.black]
+line-length = 88
+target-version = ['py312']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''

@@ -1,0 +1,21 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        {% block meta %}{% endblock %}
+        <title>{% block title %}Forum{% endblock %}</title>
+
+        {# Core forum CSS #}
+        <link rel="stylesheet" href="{% static 'wagtail_forum/css/base.css' %}">
+
+        {% block extra_css %}{% endblock %}
+    </head>
+    <body class="wf-body">
+        {% block content %}{% endblock %}
+
+        {# Core forum JS #}
+        <script src="{% static 'wagtail_forum/js/base.js' %}"></script>
+
+        {% block extra_js %}{% endblock %}
+    </body>
+</html>

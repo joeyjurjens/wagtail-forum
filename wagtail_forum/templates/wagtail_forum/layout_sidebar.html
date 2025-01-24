@@ -1,0 +1,25 @@
+{% extends "wagtail_forum/base.html" %}
+
+{% block content %}
+    <div class="wf-container">
+        <header class="wf-header">
+            {% block header %}
+                {% include "wagtail_forum/includes/breadcrumbs.html" %}
+            {% endblock %}
+        </header>
+
+        <div class="wf-layout-with-sidebar">
+            <main class="wf-main">
+                {% block main %}{% endblock %}
+            </main>
+
+            <aside class="wf-sidebar">
+                {% block sidebar %}{% endblock %}
+            </aside>
+        </div>
+
+        <footer class="wf-footer">
+            {% block footer %}{% endblock %}
+        </footer>
+    </div>
+{% endblock %}

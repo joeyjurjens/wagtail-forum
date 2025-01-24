@@ -1,0 +1,45 @@
+# Python
+*.py[cod]
+__pycache__/
+*.so
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Django/Wagtail
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+media/
+
+# Static files
+staticfiles/
+collected_static/
+
+# Development
+*.sqlite3
+*.pyc
+.DS_Store
+
+# IDEs and editors
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Poetry
+poetry.lock
+
+# Testing
+.coverage
+htmlcov/
+.tox/
+
+# Deployment
+*.pid
+*.sock

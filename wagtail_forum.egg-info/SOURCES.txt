@@ -1,0 +1,9 @@
+pyproject.toml
+wagtail_forum/__init__.py
+wagtail_forum/abstract_models.py
+wagtail_forum/apps.py
+wagtail_forum.egg-info/PKG-INFO
+wagtail_forum.egg-info/SOURCES.txt
+wagtail_forum.egg-info/dependency_links.txt
+wagtail_forum.egg-info/requires.txt
+wagtail_forum.egg-info/top_level.txt
