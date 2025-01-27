@@ -1,0 +1,24 @@
+{{ widget.media }}
+
+<div id="{{ widget.attrs.id }}_editor"></div>
+
+{% include "django/forms/widgets/input.html" %}
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const editor = new wagtail_forum.Quill(
+      document.querySelector('#{{ widget.attrs.id }}_editor'),
+      JSON.parse('{{ widget.options|escapejs }}')
+    );
+
+    // The input where the actual value is stored.
+    const hiddenTextArea = document.querySelector('#{{ widget.attrs.id }}');
+    if (hiddenTextArea.value) {
+      editor.root.innerHTML = hiddenTextArea.value;
+    }
+
+    editor.on('text-change', () => {
+      hiddenTextArea.value = editor.root.innerHTML;
+    });
+  });
+</script>

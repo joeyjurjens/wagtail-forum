@@ -1,13 +1,16 @@
+from django.apps import apps
 from django.db import models
 from django.conf import settings
 from django.utils.translation import pgettext_lazy
 
+from wagtail.admin.panels import FieldPanel
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
-from wagtail.fields import RichTextField
 from wagtail.models import Page
 
 from . import settings as forum_settings
+from .fields import QuillRichTextField
 from .mixins import RequiredForeignKeyMixin
+from .views import TopicCreateView
 
 
 class AbstractForumIndex(RoutablePageMixin, Page):
@@ -32,6 +35,16 @@ class AbstractForumIndex(RoutablePageMixin, Page):
             for forum_page in self.get_children().type(AbstractForum).live()
         ]
 
+    @classmethod
+    def allowed_subpage_models(cls):
+        if not hasattr(cls, "subpage_types"):
+            return [
+                model
+                for model in apps.get_app_config(cls._meta.app_label).get_models()
+                if issubclass(model, AbstractForum) and not model._meta.abstract
+            ]
+        return super().allowed_subpage_models()
+
 
 class AbstractForum(RoutablePageMixin, Page):
     class Meta:
@@ -40,13 +53,25 @@ class AbstractForum(RoutablePageMixin, Page):
         verbose_name_plural = pgettext_lazy("wagtail_forum", "Forums")
 
     wagtail_forum_template = "wagtail_forum/pages/forum.html"
+    wagtail_forum_topic_create_view_class = TopicCreateView
+    wagtail_forum_topic_create_template = "wagtail_forum/pages/forum_topic_create.html"
 
     def get_template(self, request, *args, **kwargs):
         return self.wagtail_forum_template
 
     @route(r"^create-topic/$", name="create_topic")
     def create_topic(self, request):
-        pass
+        model = next(
+            (
+                model
+                for model in self.allowed_subpage_models()
+                if issubclass(model, AbstractTopic)
+            ),
+            None,
+        )
+        return self.wagtail_forum_topic_create_view_class.as_view(
+            model=model, template_name=self.wagtail_forum_topic_create_template
+        )(request)
 
     def get_context(self, request, *args, **kwargs):
         ctx = super().get_context(request, *args, **kwargs)
@@ -63,6 +88,27 @@ class AbstractForum(RoutablePageMixin, Page):
     def has_sub_forums(self):
         return any(self.get_sub_forums())
 
+    @classmethod
+    def allowed_subpage_models(cls):
+        if not hasattr(cls, "subpage_types"):
+            return [
+                model
+                for model in apps.get_app_config(cls._meta.app_label).get_models()
+                if issubclass(model, (AbstractForum, AbstractTopic))
+                and not model._meta.abstract
+            ]
+        return super().allowed_subpage_models
+
+    @classmethod
+    def allowed_parent_page_models(cls):
+        if not hasattr(cls, "parent_page_types"):
+            return [
+                model
+                for model in apps.get_app_config(cls._meta.app_label).get_models()
+                if issubclass(model, AbstractForumIndex) and not model._meta.abstract
+            ]
+        return super().allowed_parent_page_models()
+
 
 class AbstractTopic(RoutablePageMixin, Page):
     class Meta:
@@ -70,8 +116,7 @@ class AbstractTopic(RoutablePageMixin, Page):
         verbose_name = pgettext_lazy("wagtail_forum", "Topic")
         verbose_name_plural = pgettext_lazy("wagtail_forum", "Topics")
 
-    content = RichTextField(
-        blank=True,
+    content = QuillRichTextField(
         help_text=pgettext_lazy("wagtail_forum", "The content of the topic."),
     )
     created_by = models.ForeignKey(
@@ -82,7 +127,11 @@ class AbstractTopic(RoutablePageMixin, Page):
         help_text=pgettext_lazy("wagtail_forum", "The user who created the topic."),
     )
 
-    wagtail_forum_template = "wagtail_forum/pages/topic.html"
+    content_panels = Page.content_panels + [
+        FieldPanel("content"),
+    ]
+
+    wagtail_forum_template = "wagtail_forum/pages/forum_topic.html"
 
     def get_template(self, request, *args, **kwargs):
         return self.wagtail_forum_template
@@ -98,6 +147,23 @@ class AbstractTopic(RoutablePageMixin, Page):
     @route(r"^react/$", name="react")
     def react(self, request):
         pass
+
+    @classmethod
+    def allowed_parent_page_models(cls):
+        if not hasattr(cls, "parent_page_types"):
+            return [
+                model
+                for model in apps.get_app_config(cls._meta.app_label).get_models()
+                if issubclass(model, AbstractForum) and not model._meta.abstract
+            ]
+        return super().allowed_parent_page_models()
+
+    @classmethod
+    def allowed_subpage_models(cls):
+        if not hasattr(cls, "subpage_types"):
+            # We don't expect any subpages for topics by default.
+            return []
+        return super().allowed_subpage_models()
 
 
 class AbstractTopicReaction(RequiredForeignKeyMixin, models.Model):
@@ -143,7 +209,7 @@ class AbstractReply(RequiredForeignKeyMixin, models.Model):
 
     REQUIRED_FOREIGN_KEYS = [("topic", "replies")]
 
-    content = RichTextField(
+    content = QuillRichTextField(
         help_text=pgettext_lazy("wagtail_forum", "The content of the reply."),
     )
     created_by = models.ForeignKey(

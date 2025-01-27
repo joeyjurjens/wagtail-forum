@@ -1,6 +1,11 @@
 {% extends "wagtail_forum/layout.html" %}
 
-{% load wagtailcore_tags %}
-
 {% block main %}
+<div class="wf-forum-index">
+    {% for forum in root_forums %}
+        <a href="{{ forum.get_url }}">
+            {{ forum.title }}
+        </a>
+    {% endfor %}
+</div>
 {% endblock %}

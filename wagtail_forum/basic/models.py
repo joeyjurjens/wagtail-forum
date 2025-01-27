@@ -11,17 +11,17 @@ from wagtail_forum.abstract_models import (
 
 
 class Index(AbstractForumIndex):
-    subpage_types = ["Forum"]
+    pass
 
 
 class Forum(AbstractForum):
-    parent_page_types = ["Index"]
-    subpage_types = ["Topic", "Forum"]
+    pass
+    # parent_page_types = ["wagtail_forum_basic.Index", "wagtail_forum_basic.Forum"]
+    # subpage_types = ["wagtail_forum_basic.Forum", "wagtail_forum_basic.Topic"]
 
 
 class Topic(AbstractTopic):
-    parent_page_types = ["Forum"]
-    subpage_types = []
+    pass
 
 
 class TopicReaction(AbstractTopicReaction):

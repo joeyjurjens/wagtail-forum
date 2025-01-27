@@ -21,6 +21,11 @@ media/
 staticfiles/
 collected_static/
 
+# frontend build
+node_modules/
+dist/
+build/
+
 # Development
 *.sqlite3
 *.pyc
