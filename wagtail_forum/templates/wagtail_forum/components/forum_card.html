@@ -1,0 +1,15 @@
+{% load wagtailcore_tags %}
+
+<div class="wf-forum-card">
+    <h2 class="wf-forum-card-title">
+        <a href="{% pageurl forum %}">
+            {{ forum.title }}
+        </a>
+    </h2>
+
+    <div class="wf-sub-forms">
+        {% for forum in forum.sub_forums %}
+            {% include "wagtail_forum/components/sub_forum.html" with sub_forum=forum %}
+        {% endfor %}
+    </div>
+</div>

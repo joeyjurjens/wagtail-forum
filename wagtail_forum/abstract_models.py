@@ -10,7 +10,12 @@ from wagtail.models import Page
 from . import settings as forum_settings
 from .fields import QuillRichTextField
 from .mixins import RequiredForeignKeyMixin
-from .views import TopicCreateView
+from .views import (
+    TopicCreateView,
+    TopicEditView,
+    TopicReplyView,
+    TopicReactView,
+)
 
 
 class AbstractForumIndex(RoutablePageMixin, Page):
@@ -24,12 +29,8 @@ class AbstractForumIndex(RoutablePageMixin, Page):
     def get_template(self, request, *args, **kwargs):
         return self.wagtail_forum_template
 
-    def get_context(self, request, *args, **kwargs):
-        ctx = super().get_context(request, *args, **kwargs)
-        ctx["root_forums"] = self.get_root_forums()
-        return ctx
-
-    def get_root_forums(self):
+    @property
+    def root_forums(self):
         return [
             forum_page.specific
             for forum_page in self.get_children().type(AbstractForum).live()
@@ -53,14 +54,15 @@ class AbstractForum(RoutablePageMixin, Page):
         verbose_name_plural = pgettext_lazy("wagtail_forum", "Forums")
 
     wagtail_forum_template = "wagtail_forum/pages/forum.html"
-    wagtail_forum_topic_create_view_class = TopicCreateView
-    wagtail_forum_topic_create_template = "wagtail_forum/pages/forum_topic_create.html"
+
+    create_topic_view_class = TopicCreateView
 
     def get_template(self, request, *args, **kwargs):
         return self.wagtail_forum_template
 
     @route(r"^create-topic/$", name="create_topic")
     def create_topic(self, request):
+        # Try to find a subpage model that is a subclass of AbstractTopic
         model = next(
             (
                 model
@@ -69,24 +71,16 @@ class AbstractForum(RoutablePageMixin, Page):
             ),
             None,
         )
-        return self.wagtail_forum_topic_create_view_class.as_view(
-            model=model, template_name=self.wagtail_forum_topic_create_template
+        return self.create_topic_view_class.as_view(
+            model=model, template_name="wagtail_forum/pages/forum_topic_create.html"
         )(request)
 
-    def get_context(self, request, *args, **kwargs):
-        ctx = super().get_context(request, *args, **kwargs)
-        ctx["sub_forums"] = self.get_sub_forums()
-        return ctx
-
-    def get_sub_forums(self):
+    @property
+    def sub_forums(self):
         return [
             sub_forum.specific
             for sub_forum in self.get_children().type(AbstractForum).live()
         ]
-
-    @property
-    def has_sub_forums(self):
-        return any(self.get_sub_forums())
 
     @classmethod
     def allowed_subpage_models(cls):
@@ -133,20 +127,24 @@ class AbstractTopic(RoutablePageMixin, Page):
 
     wagtail_forum_template = "wagtail_forum/pages/forum_topic.html"
 
+    edit_view_class = TopicEditView
+    reply_view_class = TopicReplyView
+    react_view_class = TopicReactView
+
     def get_template(self, request, *args, **kwargs):
         return self.wagtail_forum_template
 
     @route(r"^edit/$", name="edit")
     def edit(self, request):
-        pass
+        return self.edit_view_class.as_view(instance=self)(request)
 
     @route(r"^reply/$", name="reply")
     def reply(self, request):
-        pass
+        return self.reply_view_class.as_view(instance=self)(request)
 
     @route(r"^react/$", name="react")
     def react(self, request):
-        pass
+        return self.react_view_class.as_view(instance=self)(request)
 
     @classmethod
     def allowed_parent_page_models(cls):

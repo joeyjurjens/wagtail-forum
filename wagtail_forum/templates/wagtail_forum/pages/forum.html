@@ -1,7 +1,7 @@
-{% extends "wagtail_forum/layout.html" %}
+{% extends "wagtail_forum/base.html" %}
 
-{% block main %}
-    {{ page }}
-    -
-    {{ sub_forums }}
+{% load wagtailcore_tags %}
+
+{% block content %}
+    {% include "wagtail_forum/components/forum_card.html" with forum=page %}
 {% endblock %}

@@ -1,4 +1,4 @@
-from django.views.generic import CreateView
+from django.views.generic import CreateView, View
 
 
 class TopicCreateView(CreateView):
@@ -11,3 +11,15 @@ class TopicCreateView(CreateView):
     def form_valid(self, form):
         form.instance.created_by = self.request.user
         return super().form_valid(form)
+
+
+class TopicEditView(View):
+    pass
+
+
+class TopicReplyView(View):
+    pass
+
+
+class TopicReactView(View):
+    pass

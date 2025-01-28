@@ -10,14 +10,12 @@ from wagtail_forum.abstract_models import (
 )
 
 
-class Index(AbstractForumIndex):
+class ForumIndex(AbstractForumIndex):
     pass
 
 
 class Forum(AbstractForum):
     pass
-    # parent_page_types = ["wagtail_forum_basic.Index", "wagtail_forum_basic.Forum"]
-    # subpage_types = ["wagtail_forum_basic.Forum", "wagtail_forum_basic.Topic"]
 
 
 class Topic(AbstractTopic):
@@ -26,15 +24,23 @@ class Topic(AbstractTopic):
 
 class TopicReaction(AbstractTopicReaction):
     topic = models.ForeignKey(
-        "Topic", on_delete=models.CASCADE, related_name="reactions"
+        Topic,
+        on_delete=models.CASCADE,
+        related_name="reactions",  # Required related_name
     )
 
 
 class Reply(AbstractReply):
-    topic = models.ForeignKey("Topic", on_delete=models.CASCADE, related_name="replies")
+    topic = models.ForeignKey(
+        Topic,
+        on_delete=models.CASCADE,
+        related_name="replies",  # Required related_name
+    )
 
 
 class ReplyReaction(AbstractReplyReaction):
     reply = models.ForeignKey(
-        "Reply", on_delete=models.CASCADE, related_name="reactions"
+        Reply,
+        on_delete=models.CASCADE,
+        related_name="reactions",  # Required related_name
     )

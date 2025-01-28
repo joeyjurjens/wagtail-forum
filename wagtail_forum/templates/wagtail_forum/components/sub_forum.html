@@ -1,0 +1,21 @@
+{% load i18n wagtailcore_tags %}
+
+<div class="wf-sub-forum">
+    <h3 class="wf-sub-forum-title">
+        <a href="{% pageurl forum %}">
+            {{ sub_forum.title }}
+        </a>
+    </h3>
+
+    <div class="wf-sub-forum-topic-count">
+        {{ sub_forum.topics.count|default:0 }} {% trans "topics" %}
+    </div>
+
+    <div class="wf-sub-forum-latest-topic">
+        Hello Everyone!
+
+        <div class="wf-sub-forum-latest-reply">
+            <small>By henk</small>
+        </div>
+    </div>
+</div>
