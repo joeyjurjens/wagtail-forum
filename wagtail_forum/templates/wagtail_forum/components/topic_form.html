@@ -1,0 +1,27 @@
+{% load i18n wagtailcore_tags %}
+
+<form method="post">
+    {% csrf_token %}
+
+    {% for field in form %}
+        <div class="wf-form-group">
+            {{ field.label_tag }}
+            {{ field }}
+            {% if field.help_text %}
+                <span class="wf-form-help">{{ field.help_text }}</span>
+            {% endif %}
+            {% if field.errors %}
+                <span class="wf-form-error">{{ field.errors }}</span>
+            {% endif %}
+        </div>
+    {% endfor %}
+
+    <div class="wf-form-actions">
+        <button type="submit" class="wf-button">
+            {% trans "Create Topic" %}
+        </button>
+        <a href="{% pageurl page %}" class="wf-button">
+            {% trans "Cancel" %}
+        </a>
+    </div>
+</form>

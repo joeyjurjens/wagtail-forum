@@ -3,7 +3,7 @@
 <div class="wf-forum-card">
     <h2 class="wf-forum-card-title">
         <a href="{% pageurl forum %}">
-            {{ forum.title }}
+            {{ card_title|default:forum.title }}
         </a>
     </h2>
 

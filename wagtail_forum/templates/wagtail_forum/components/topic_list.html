@@ -1,0 +1,17 @@
+{% load i18n wagtailcore_tags %}
+
+<div class="wf-topic-list">
+    {% for topic in topics %}
+        <div class="wf-topic-item">
+            <div class="wf-topic-main">
+                <a href="{% pageurl topic %}" class="wf-topic-title">{{ topic.title }}</a>
+                <div class="wf-topic-meta">
+                    {% trans "by" %} {{ topic.owner }} • {{ topic.created_at|timesince }}
+                </div>
+            </div>
+            <div class="wf-topic-stats">
+                <span>{{ topic.replies.count }} {% trans "replies" %}</span>
+            </div>
+        </div>
+    {% endfor %}
+</div>

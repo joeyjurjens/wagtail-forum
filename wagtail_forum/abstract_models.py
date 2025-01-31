@@ -72,7 +72,9 @@ class AbstractForum(RoutablePageMixin, Page):
             None,
         )
         return self.create_topic_view_class.as_view(
-            model=model, template_name="wagtail_forum/pages/forum_topic_create.html"
+            model=model,
+            forum=self,
+            template_name="wagtail_forum/pages/create_topic.html",
         )(request)
 
     @property
@@ -80,6 +82,12 @@ class AbstractForum(RoutablePageMixin, Page):
         return [
             sub_forum.specific
             for sub_forum in self.get_children().type(AbstractForum).live()
+        ]
+
+    @property
+    def topics(self):
+        return [
+            topic.specific for topic in self.get_children().type(AbstractTopic).live()
         ]
 
     @classmethod
@@ -125,7 +133,7 @@ class AbstractTopic(RoutablePageMixin, Page):
         FieldPanel("content"),
     ]
 
-    wagtail_forum_template = "wagtail_forum/pages/forum_topic.html"
+    wagtail_forum_template = "wagtail_forum/pages/topic.html"
 
     edit_view_class = TopicEditView
     reply_view_class = TopicReplyView

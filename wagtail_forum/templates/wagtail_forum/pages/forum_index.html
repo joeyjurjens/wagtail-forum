@@ -3,7 +3,9 @@
 {% load wagtailcore_tags %}
 
 {% block content %}
-    {% for forum in page.root_forums %}
-        {% include "wagtail_forum/components/forum_card.html" with forum=forum %}
-    {% endfor %}
+    <div class="wf-rootforums-wrapper">
+        {% for forum in page.root_forums %}
+            {% include "wagtail_forum/components/forum_card.html" with forum=forum %}
+        {% endfor %}
+    </div>
 {% endblock %}

@@ -8,7 +8,7 @@
     </h3>
 
     <div class="wf-sub-forum-topic-count">
-        {{ sub_forum.topics.count|default:0 }} {% trans "topics" %}
+        {{ sub_forum.topics|length|default:0 }} {% trans "topics" %}
     </div>
 
     <div class="wf-sub-forum-latest-topic">

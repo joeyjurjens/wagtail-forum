@@ -1,0 +1,37 @@
+{% extends "wagtail_forum/base.html" %}
+{% load static %}
+
+{% block title %}
+    {{ page.title }}
+{% endblock %}
+
+{% block extra_css %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static 'wagtail_forum/css/wagtail-forum.css' %}">
+{% endblock %}
+
+{% block extra_js %}
+    {{ block.super }}
+    <script src="{% static 'wagtail_forum/js/quill.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="wf-topic">
+        <div class="wf-topic-header">
+            <h1 class="wf-topic-title">{{ page.title }}</h1>
+            <div class="wf-topic-meta">
+                Posted by {{ page.created_by }} • {{ page.created_at|timesince }} ago
+            </div>
+        </div>
+
+        <div class="wf-post">
+            <div class="wf-post-author">
+                <div class="wf-author-name">{{ page.created_by }}</div>
+                <div class="wf-author-posts">Posts: {{ page.created_by.topics.count }}</div>
+            </div>
+            <div class="wf-post-content">
+                {{ page.content|safe }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

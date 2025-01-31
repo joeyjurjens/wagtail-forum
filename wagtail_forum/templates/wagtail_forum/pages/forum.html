@@ -1,7 +1,28 @@
 {% extends "wagtail_forum/base.html" %}
 
-{% load wagtailcore_tags %}
+{% load i18n wagtailcore_tags %}
 
 {% block content %}
-    {% include "wagtail_forum/components/forum_card.html" with forum=page %}
+    <div class="wf-forum-header">
+        <h1>{{ page.title }}</h1>
+        <a class="wf-button" href="create-topic/">
+            {% trans "Start new topic" %}
+        </a>
+    </div>
+
+    {% if page.sub_forums %}
+        <div class="wf-section">
+            {% include "wagtail_forum/components/forum_card.html" with forum=page %}
+        </div>
+    {% endif %}
+
+    <div class="wf-section">
+        {% if page.topics %}
+            {% include "wagtail_forum/components/topic_list.html" with topics=page.topics %}
+        {% else %}
+            <p class="wf-no-content">
+                {% trans "No topics yet" %}
+            </p>
+        {% endif %}
+    </div>
 {% endblock %}

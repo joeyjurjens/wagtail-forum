@@ -1,0 +1,20 @@
+{% load wagtailcore_tags %}
+
+<div class="wf-container">
+    <div class="wf-breadcrumbs">
+        <nav aria-label="breadcrumb">
+            <ol class="wf-breadcrumb-list">
+                {% for ancestor in page.get_ancestors %}
+                    {% if not ancestor.is_root %}
+                        <li><a href="{% pageurl ancestor %}">{{ ancestor.title }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if page %}
+                <li aria-current="page">
+                    <a href="{% pageurl page %}">{{ page.title }}</a>
+                </li>
+                {% endif %}
+            </ol>
+        </nav>
+    </div>
+</div>

@@ -1,0 +1,22 @@
+{% extends "wagtail_forum/base.html" %}
+{% load static wagtailcore_tags %}
+
+{% block title %}
+    Create Topic in {{ page.title }}
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'wagtail_forum/css/wagtail-forum.css' %}">
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'wagtail_forum/js/quill.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="wf-create-topic">
+        <h1>Create Topic in '{{ page.title }}'</h1>
+
+        {% include "wagtail_forum/components/topic_form.html" %}
+    </div>
+{% endblock %}
